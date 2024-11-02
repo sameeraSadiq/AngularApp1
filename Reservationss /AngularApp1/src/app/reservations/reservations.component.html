@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="bg-dark text-white p-2">
+      <span class="navbar-brand ml-2">RESERVATION</span>
+    </div>
+  </div>
+
+  <div class="row text-white">
+    <div class="col-3 p-2">
+      <div class="d-grid gap-2">
+        <button class="btn btn-outline-primary" (click)="selectHome()">Home</button>
+        
+        <h5>Select a Product:</h5>
+        <ng-container *ngIf="products.length > 0; else noProducts">
+          <button *ngFor="let product of products" 
+                  class="btn btn-outline-primary"
+                  (click)="selectProduct(product.id)">
+            {{ product.name }}
+          </button>
+        </ng-container>
+        <ng-template #noProducts>
+          <p>No products available.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="col-9 p-2 text-dark">
+      <h4 *ngIf="selectedProduct">Book a Time Slot for {{ selectedProduct.name }}</h4>
+      <div *ngIf="selectedProduct">
+        <form (ngSubmit)="reserve()">
+          <div class="mb-3">
+            <label for="date" class="form-label">Select Date:</label>
+            <input type="date" id="date" 
+                   [(ngModel)]="selectedDate" 
+                   name="date" 
+                   [min]="minDate" 
+                   required 
+                   class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="fromTime" class="form-label">From:</label>
+            <select id="fromTime" 
+                    [(ngModel)]="selectedFromTime" 
+                    name="fromTime" 
+                    required 
+                    class="form-select">
+              <option *ngFor="let time of availableTimes" [value]="time" >{{time}}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="toTime" class="form-label">To:</label>
+            <select id="toTime" 
+                    [(ngModel)]="selectedToTime" 
+                    name="toTime" 
+                    required 
+                    class="form-select">
+              <option *ngFor="let time of availableTimes" [value]="time">{{time}}</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-2">Book Now</button>
+        </form>
+      </div>
+
+      <div *ngIf="!selectedProductId">
+        <p>Please select a product to book a time</p>
+      </div>
+
+      <!-- Display the message -->
+      <div *ngIf="message" class="alert alert-info mt-3">
+        {{ message }}
+      </div>
+    </div>
+  </div>
+</div>
